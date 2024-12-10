@@ -4,126 +4,151 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class ManagerAnimal {
-    public static void main(String[] args) {
-        Animal[] animals;
-        int soLuong;
-        System.out.print("Nhập vào số lượng động vật: ");
-        soLuong = new Scanner(System.in).nextInt();
-        animals = new Animal[soLuong];
-        System.out.println("Số lượng động vật trong sở thú là " + soLuong + " con");
+    public static Animal[] animals;
+    public static int total;
+    final static int PLUS = 2;
 
-        int result = inputAnimal(animals, soLuong, 0);
-        byte s = 0;
-        do {
-            if (result == animals.length) {
-                System.out.println("Danh sách đã đầy bạn có muốn nhập thêm không\n0. Không\n1. Có");
-                System.out.print("Nhập lựa chọn: ");
-                s = new Scanner(System.in).nextByte();
-                switch (s) {
-                    case 0:{
-                        System.out.println("Hoàn thành nhập!");
-                    } break;
-                    case 1:{
-                        animals = extendAnimal(animals, 10);
-                        System.out.println("Số lượng động vật trong sở thú là " + animals.length + " con");
-                        result = inputAnimal(animals, animals.length, result);
-                    } break;
-                    default:
-                        System.out.println("Lựa chọn không hợp lệ!");
-                }
-            }
-        } while (s != 0);
-        showAnimalList(animals, soLuong);
-        System.out.println("Thêm 1 con vật");
+    public static void main(String[] args) {
+        System.out.print("Nhập vào số lượng động vật: ");
+        total = new Scanner(System.in).nextInt();
+        animals = new Animal[total];
+        System.out.println("Số lượng động vật trong sở thú là " + total + " con");
+        inputAnimal(animals);
+
     }
-    public static void showInfo(Animal animal) {
-        System.out.println("Tên: " + animal.getName());
-        System.out.println("Tuổi: " + animal.getAge());
-    }
-    public static void showAnimalList(Animal[] animals, int soLuong) {
-        for (int i = 0; i < soLuong; i++) {
-            if (animals[i] instanceof Lion) {
-                System.out.println("Thông tin con thứ " + (i+1) + ": con Hổ");
-                showInfo(animals[i]);
-            } else if (animals[i] instanceof Elephant) {
-                System.out.println("Thông tin con thứ " + (i+1) + ": con Voi");
-                showInfo(animals[i]);
-            } else if (animals[i] instanceof Monkey) {
-                System.out.println("Thông tin con thứ " + (i+1) + ": con Khỉ");
-                showInfo(animals[i]);
+    public static void showAnimalList(Animal[] animals, int total) {
+        System.out.println("*--- Hiển thị danh sách động vật ---*");
+        for (int i = 0; i < total; i++) {
+            if (animals[i] != null) {
+                animals[i].showInfo();
             }
         }
+        System.out.println("*-----------------------------------*");
     }
-    public static Lion setLion() {
-        Lion lion = new Lion();
-        System.out.print("Nhập tên hổ: ");
-        String name = new Scanner(System.in).next();
-        System.out.print("Nhập tuổi hổ: ");
-        int age = new Scanner(System.in).nextInt();
-        lion.setName(name);
-        lion.setAge(age);
-        return lion;
-    }
-    public static Elephant setElephant() {
-        Elephant Elephant = new Elephant();
-        System.out.print("Nhập tên voi: ");
-        String name = new Scanner(System.in).next();
-        System.out.print("Nhập tuổi voi: ");
-        int age = new Scanner(System.in).nextInt();
-        Elephant.setName(name);
-        Elephant.setAge(age);
-        return Elephant;
-    }
-    public static Monkey setMonkey() {
-        Monkey monkey = new Monkey();
-        System.out.print("Nhập tên khỉ: ");
-        String name = new Scanner(System.in).next();
-        System.out.print("Nhập tuổi khỉ: ");
-        int age = new Scanner(System.in).nextInt();
-        monkey.setName(name);
-        monkey.setAge(age);
-        return monkey;
-    }
-    public static int inputAnimal(Animal[] animals, int soLuong, int startIndex) {
+    public static void inputAnimal(Animal[] animals) {
         int luaChon;
-        int i = startIndex;
+        int i = 0;
         do {
-            System.out.println("1. Nhập vào Lion\n" + "2. Nhập vào Elephant\n" + "3. Nhập vào Monkey\n" + "4. Dừng nhập vào");
+            System.out.println("\n*--- MENU ---*");
+            System.out.println("1. Nhập vào Lion\n2. Nhập vào Elephant\n3. Nhập vào Monkey\n4. Dừng nhập vào\n5. Hiển thị danh sách động vật\n6. Tìm kiếm\n7. Xóa con vật theo tên\n0. Thoát chương trình");
             System.out.print("Nhập lựa chọn: ");
             luaChon = new Scanner(System.in).nextInt();
             switch (luaChon) {
                 case 1:{
-                    System.out.println("Con thứ " + (i+1) + "/" + soLuong + " con");
-                    animals[i] = setLion();
-                    System.out.println("Thông tin chú hổ vừa nhập: ");
-                    showInfo(animals[i]);
-                    i++;
+                    if (!(i >= total)) {
+                        System.out.println("Con thứ " + (i+1) + "/" + total + " con");
+                        animals[i] = new Lion();
+                        animals[i].inputInfo();
+                        i++;
+                    } else {
+                        extendAnimal(animals);
+                    }
                 } break;
                 case 2:{
-                    System.out.println("Con thứ " + (i+1) + "/" + soLuong + " con");
-                    animals[i] = setElephant();
-                    System.out.println("Thông tin chú voi vừa nhập: ");
-                    showInfo(animals[i]);
-                    i++;
+                    if (!(i >= total)) {
+                        System.out.println("Con thứ " + (i+1) + "/" + total + " con");
+                        animals[i] = new Elephant();
+                        animals[i].inputInfo();
+                        i++;
+                    } else {
+                        extendAnimal(animals);
+                    }
                 } break;
                 case 3:{
-                    System.out.println("Con thứ " + (i+1) + "/" + soLuong + " con");
-                    animals[i] = setMonkey();
-                    System.out.println("Thông tin chú khỉ vừa nhập: ");
-                    showInfo(animals[i]);
-                    i++;
+                    if (!(i >= total)) {
+                        System.out.println("Con thứ " + (i+1) + "/" + total + " con");
+                        animals[i] = new Monkey();
+                        animals[i].inputInfo();
+                        i++;
+                    } else {
+                        extendAnimal(animals);
+                    }
                 } break;
                 case 4:{
                     System.out.println("Dừng nhập!");
                 } break;
+                case 5:{
+                    showAnimalList(animals, total);
+                } break;
+                case 6:{
+                    findAnimal(animals);
+                } break;
+                case 7:{
+                    removeAnimal(animals);
+                } break;
+                case 0:{
+                    System.out.println("Thoát chương trình!");
+                } break;
                 default:
                     System.out.println("Lựa chọn không hợp lệ!");
             }
-        } while (!(luaChon == 4 || i == soLuong));
-        return i;
+        } while (!(luaChon == 0));
     }
-    public static Animal[] extendAnimal(Animal[] animal, int them) {
-        Animal[] newAnimal = Arrays.copyOf(animal, animal.length + them);
-        return newAnimal;
+    public static Animal[] extendTotal(Animal[] animals, int plus) {
+        total = total + plus;
+        Animal[] newAnimals = new Animal[total];
+        for (int i = 0; i < animals.length; i++) {
+            newAnimals[i] = animals[i];
+        }
+        return newAnimals;
+    }
+    public static void extendAnimal(Animal[] animals) {
+        byte s = 0;
+        do {
+            System.out.println("Danh sách đã đầy bạn có muốn mở rộng thêm không\n0. Không\n1. Có");
+            System.out.print("Nhập lựa chọn: ");
+            s = new Scanner(System.in).nextByte();
+            switch (s) {
+                case 0:{
+                    System.out.println("Không mở rộng!");
+                } break;
+                case 1:{
+                    animals = extendTotal(animals, PLUS);
+                    System.out.println("Tổng số lượng động vật sau khi thêm là " + animals.length + " con");
+                } break;
+                default:
+                    System.out.println("Lựa chọn không hợp lệ!");
+            }
+        } while (!(s == 0 || s == 1));
+    }
+    public static void findAnimal(Animal[] animals) {
+        System.out.print("Nhập tên con vật cần tìm: ");
+        String nameInput = new Scanner(System.in).nextLine();
+        boolean result = false;
+        for (int i = 0; i < animals.length; i++) {
+            if (!nameInput.equalsIgnoreCase(animals[i].getName())) {
+                continue;
+            } else {
+                result = true;
+                System.out.println("Tìm thấy!");
+                animals[i].showInfo();
+                break;
+            }
+        }
+        if (!result) {
+            System.out.println("Không tìm thấy!");
+        }
+    }
+    public static void removeAnimal(Animal[] animals) {
+        System.out.print("Nhập tên con vật cần xóa: ");
+        String nameInput = new Scanner(System.in).nextLine();
+        boolean result = false;
+        for (int i = 0; i < animals.length; i++) {
+            if (!nameInput.equalsIgnoreCase(animals[i].getName())) {
+                continue;
+            } else {
+                result = true;
+                for (int j = i; j < animals.length - 1; j++) {
+                    animals[j].setName(animals[j+1].getName());
+                    animals[j].setAge(animals[j+1].getAge());
+                }
+                animals[animals.length-1] = null;
+                System.out.println("Xóa thành công!");
+                break;
+            }
+        }
+        if (!result) {
+            System.out.println("Con vật bạn muốn xóa không tồn tại!");
+        }
     }
 }
