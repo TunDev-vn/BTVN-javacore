@@ -8,7 +8,7 @@ public class ManagerAnimal {
     public static int total;
     final static int PLUS = 2;
 
-    public static void main(String[] args) {
+    public static void runProgram() {
         System.out.print("Nhập vào số lượng động vật: ");
         total = new Scanner(System.in).nextInt();
         animals = new Animal[total];
