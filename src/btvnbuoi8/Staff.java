@@ -1,53 +1,47 @@
 package btvnbuoi8;
 
-public class Staff {
-    protected int id;
-    protected String name;
-    protected String phoneNumber;
-    protected int workingDays;
-    protected double salaryPerDay;
+public class Staff extends Employee {
+    private Manager manager;
 
-    public int getId() {
-        return id;
+    public Manager getManager() {
+        return manager;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setManager(Manager manager) {
+        this.manager = manager;
+    }
+    public void removeManager() {
+        this.manager = null;
     }
 
-    public String getName() {
-        return name;
+    public Staff() {
+        this.setSalaryPerDay(100);
+    }
+    public Staff(String id, String fullName, String phoneNumber, int workingDays) {
+        super(id, fullName, phoneNumber, workingDays);
+        this.setSalaryPerDay(100);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public void showInfo() {
+        System.out.println("Chức vụ: nhân viên thường");
+        super.showInfo();
+        if (manager == null) {
+            System.out.println("Chưa thuộc trưởng phòng nào");
+        } else {
+            System.out.println("Thuộc quản lý của trưởng phòng: " + manager.getId());
+        }
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    @Override
+    public double calSalary() {
+        return getSalaryPerDay() * getWorkingDays();
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public int getWorkingDays() {
-        return workingDays;
-    }
-
-    public void setWorkingDays(int workingDays) {
-        this.workingDays = workingDays;
-    }
-
-    public double getSalaryPerDay() {
-        return salaryPerDay;
-    }
-
-    public void setSalaryPerDay(double salaryPerDay) {
-        this.salaryPerDay = salaryPerDay;
-    }
-
-    public double getTotalSalary() {
-        return salaryPerDay * workingDays;
+    @Override
+    public void handleBeforeDeletion() {
+        if (manager != null) {
+            manager.removeStaff(this);
+        }
     }
 }
