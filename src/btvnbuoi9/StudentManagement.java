@@ -12,6 +12,10 @@ public class StudentManagement {
     }
 
     public static void displayList(List<Student> studentList) {
+        if (studentList.isEmpty()) {
+            System.out.println("Danh sách đang trống.");
+            return;
+        }
         System.out.println("HIỂN THỊ DANH SÁCH SINH VIÊN");
         System.out.println("----------------------------");
         for (Student student : studentList) {
@@ -26,11 +30,10 @@ public class StudentManagement {
         while (true) {
             try {
                 System.out.print("Nhập mã sinh viên: ");
-                id = scanner.nextLine();
-                if (id == null || id.trim().isEmpty()) {
+                id = scanner.nextLine().trim();
+                if (id.isEmpty()) {
                     throw new IllegalArgumentException("Mã sinh viên không được để trống.");
                 }
-                id = id.trim();
                 if (!id.matches("[a-zA-Z0-9]+")) {
                     throw new IllegalArgumentException("Mã sinh viên chỉ bao gồm số và kí tự.");
                 }
@@ -39,7 +42,7 @@ public class StudentManagement {
                 }
                 break;
             } catch (IllegalArgumentException e) {
-                System.out.println("Lỗi: " + e.getMessage());
+                System.out.println("LỖI: " + e.getMessage());
                 System.out.println("Vui lòng nhập lại.");
             }
         }
@@ -62,17 +65,17 @@ public class StudentManagement {
         while (true) {
             try {
                 System.out.print("Nhập họ tên sinh viên: ");
-                name = scanner.nextLine();
-                if (name == null || name.trim().isEmpty()) {
+                name = scanner.nextLine().trim();
+                if (name.isEmpty()) {
                     throw new IllegalArgumentException("Tên sinh viên không được để trống.");
                 }
                 if (!name.matches("[\\p{L}\\s]+")) {
                     throw new IllegalArgumentException("Tên sinh viên chứa các ký tự không hợp lệ.");
                 }
-                name = capitalizeFirstLetter(name.trim().replaceAll("[ ]+", " "));
+                name = capitalizeFirstLetter(name.replaceAll("[ ]+", " "));
                 break;
             } catch (IllegalArgumentException e) {
-                System.out.println("Lỗi: " + e.getMessage());
+                System.out.println("LỖI: " + e.getMessage());
                 System.out.println("Vui lòng nhập lại.");
             }
         }
@@ -80,7 +83,7 @@ public class StudentManagement {
     }
 
     public static double checkScore(String scoreStr) {
-        if (scoreStr == null || scoreStr.trim().isEmpty()) {
+        if (scoreStr.isEmpty()) {
             throw new IllegalArgumentException("Điểm thi không được để trống.");
         }
         double score;
@@ -100,11 +103,11 @@ public class StudentManagement {
         while (true) {
             try {
                 System.out.print("Nhập điểm thi: ");
-                score = checkScore(scanner.nextLine());
+                score = checkScore(scanner.nextLine().trim());
 
                 break;
             } catch (IllegalArgumentException e) {
-                System.out.println("Lỗi: " + e.getMessage());
+                System.out.println("LỖI: " + e.getMessage());
                 System.out.println("Vui lòng nhập lại.");
             }
         }
@@ -165,12 +168,11 @@ public class StudentManagement {
 
     // 5. Sắp xếp sinh viên theo điểm thi
     public void sortStudentsByScore() {
-        System.out.println("SẮP XẾP DANH SÁCH SINH VIÊN THEO ĐIỂM THI TĂNG DẦN");
         if (students.isEmpty()) {
             System.out.println("Danh sách sinh viên đang trống.");
             return;
         }
-
+        System.out.println("SẮP XẾP DANH SÁCH SINH VIÊN THEO ĐIỂM THI TĂNG DẦN");
         List<Student> sortedStudents = new ArrayList<>(students);
         sortedStudents.sort((s1, s2) -> Double.compare(s1.getScore(), s2.getScore()));
         displayList(sortedStudents);
