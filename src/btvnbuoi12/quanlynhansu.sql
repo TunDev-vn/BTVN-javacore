@@ -50,15 +50,15 @@ FROM employees;
 # 4.Lấy 3 nhân viên đầu tiên, bỏ qua 2 nhân viên đầu tiên:
 SELECT *
 FROM employees
-LIMIT 3;
+         LIMIT 3;
 
 SELECT *
 FROM employees
-LIMIT 3 OFFSET 2;
+         LIMIT 3 OFFSET 2;
 
 SELECT *
 FROM employees
-LIMIT 2, 3;
+         LIMIT 2, 3;
 # 5.Tìm nhân viên có tên chứa “Nguyễn”:
 SELECT *
 FROM employees
@@ -93,7 +93,7 @@ FROM employees e
          INNER JOIN departments d ON e.department_id = d.department_id
 GROUP BY d.department_name
 ORDER BY quantity DESC
-LIMIT 1;
+    LIMIT 1;
 
 # 12.Tìm nhân viên có mức lương cao nhất trong mỗi phòng ban
 SELECT d.department_name, e.name, e.salary AS largest_salary
@@ -101,6 +101,34 @@ FROM employees e
          INNER JOIN departments d ON e.department_id = d.department_id
 WHERE e.salary = (SELECT MAX(e2.salary) FROM employees e2 WHERE e2.department_id = e.department_id);
 # 13. Tính mức lương trung bình của từng vị trí công việc, chỉ hiển thị các vị trí có lương trung bình lớn hơn 1500
-SELECT e.position, AVG(e.salary) AS average_salary
+SELECT e.position, ROUND(AVG(e.salary), 2) AS average_salary
 FROM employees e
-GROUP BY e.position;
+GROUP BY e.position
+HAVING average_salary > 1500;
+# 14. Lấy danh sách nhân viên và đồng nghiệp cùng phòng ban (không bao gồm chính họ)
+SELECT d.department_name, e.name, e.position
+FROM employees e
+         INNER JOIN departments d ON e.department_id = d.department_id
+WHERE d.department_id = (SELECT department_id FROM employees WHERE employee_id = 3);
+# 15. Tính tổng số năm kinh nghiệm của mỗi phòng ban
+SELECT d.department_name, SUM(TIMESTAMPDIFF(YEAR, e.hire_date, NOW())) AS total_years_worked
+FROM employees e
+         INNER JOIN departments d ON e.department_id = d.department_id
+GROUP BY d.department_name;
+
+# 16. Tìm nhân viên được tuyển dụng sớm nhất trong mỗi phòng ban, bao gồm cả tên và ngày tuyển dụng
+SELECT d.department_name, e.name, e.hire_date
+FROM employees e
+         INNER JOIN departments d ON e.department_id = d.department_id
+WHERE hire_date = (SELECT MIN(e2.hire_date) FROM employees e2 WHERE e2.department_id = e.department_id);
+# 17. Tìm phòng ban có tổng lương lớn nhất và hiển thị tên nhân viên, lương và phòng ban đó
+SELECT d.department_name, e.name, e.salary
+FROM employees e
+         INNER JOIN departments d ON e.department_id = d.department_id
+WHERE d.department_id = (SELECT DISTINCT d.department_id
+                         FROM employees e
+                                  INNER JOIN departments d ON e.department_id = d.department_id
+                         GROUP BY d.department_id
+                         ORDER BY SUM(e.salary) DESC
+    LIMIT 1);
+# 18. Phân nhóm nhân viên theo bậc lương (ví dụ: < 1500, 1500-2000, > 2000) và tính tổng số nhân viên trong từng nhóm/-strong/-heart:>:o:-((:-h Sử dụng CASE và GROUP BY:
